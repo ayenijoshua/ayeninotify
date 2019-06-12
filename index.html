@@ -1,0 +1,51 @@
+
+<html>
+    <head>
+        <title></title>
+        <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        <!-- <link href="bootstrap.min.css" /> -->
+       
+    </head>
+    <body>
+        <div class="noti">gg</div>
+        <script src="jquery.min.js"></script>
+        <!-- <script src="bootstrap.min.js"></script> -->
+        <script src="notify.js"></script>
+        
+        
+    </body>
+    <script>
+            $.Notify('indigo','<li>username is required</li>',
+            {
+                modalPlacement:'topRight',
+                showOverlay:true,
+                overlayBgColor:'red',
+                //showCloseBtn: false,
+                dismissOnClickOverlay:false,
+                customModalStyles:{
+                    opacity:'0.1',
+                    kill:''
+                }
+            });
+            $('.noti').click(function(){
+                $(this).Notify(
+                    {   
+                        modalPlacement:'topRight',
+                        overlayBgColor:'red',
+                        showOverlay:true,
+                        modalColor:'black',
+                        customModalStyles:{
+                            opacity:'0.5',
+                            color:'black'
+                        },
+                       closeBtnPlacement:{
+                            top:0,
+                            left:'95%'
+                        }
+                    }
+                );
+            });
+           
+
+        </script>
+</html>
