@@ -15,11 +15,11 @@
                 left:'95%'
             },
             topLeft:{
-                top: '10%',
-                left: '40%',
+                top: '0%',
+                left: '0%',
             },
             middleCenter:{
-                top: '10%',
+                top: '40%',
                 left: '40%',
             },
             middleRight:{
@@ -47,8 +47,6 @@
             modalPosition: 'fixed',
             modalWidth: '300px',
             modalHeight: 'auto',
-            // top: '10%',
-            // left: '40%',
             modalZIndex: 9999,
             modalBgColor:  '#00d1b2', 
             modalPadding: '.75rem 1.25rem',
@@ -89,7 +87,9 @@
             closeBtnPlacement:'topRight',
             customModalStyles:{},
             customCloseBtnStyles:{},
-            dismissOnClickOverlay:true
+            dismissOnClickOverlay:true,
+            overRideDefaultStyles:false,
+            modalMediaQUeries:''
             
         }
         this.opts = opts;
@@ -145,28 +145,32 @@
          */
         checkCustomStyles:function(type){
             var self = this;
-            switch (type) {
-                case 'modal':
-                    var props = Object.getOwnPropertyNames(this.options.customModalStyles);
-                    props.filter(function(prop){
-                        if(self.initModalStyles[prop]){
-                            delete self.options.customModalStyles[prop];
-                        }
-                    })
-                return this.options.customModalStyles;
-                    break;
-                case 'closeBtn':
-                    var props = Object.getOwnPropertyNames(this.options.customCloseBtnStyles);
-                    props.filter(function(prop){
-                        if(self.initialCloseBtnStyles[prop]){
-                            delete self.options.customCloseBtnStyles[prop];
-                        }
-                    })
-                return this.options.customCloseBtnStyles;
-                default:
-                    break;
+            if(this.options.overRideDefaultStyles){
+                return this.options.customModalStyles
             }
-           
+                switch (type) {
+                    case 'modal':
+                        var props = Object.getOwnPropertyNames(this.options.customModalStyles);
+                        props.filter(function(prop){
+                            if(self.initModalStyles[prop]){
+                                console.log("You have overidden default "+prop)
+                                delete self.options.customModalStyles[prop];
+                            }
+                        })
+                    return this.options.customModalStyles;
+                        break;
+                    case 'closeBtn':
+                        var props = Object.getOwnPropertyNames(this.options.customCloseBtnStyles);
+                        props.filter(function(prop){
+                            if(self.initialCloseBtnStyles[prop]){
+                                console.log("You have overidden default "+prop)
+                                delete self.options.customCloseBtnStyles[prop];
+                            }
+                        })
+                    return this.options.customCloseBtnStyles;
+                    default:
+                        break;
+                }
         },
         
         /**
@@ -177,7 +181,7 @@
             return $("<div>")
             .css(this.modalStyles)
             .addClass(this.options.modalClass)
-            .appendTo("body");//this.modalSettings.appendTo
+            .appendTo(this.options.modalAppendTo);//this.modalSettings.appendTo
         },
 
         /**
@@ -275,6 +279,13 @@
                     this.boxIn()
                     break;
                 default:
+                
+                    const s = document.createElement('style');
+                    s.textContent = '@media only screen and (max-width: 768px) {'+
+                        '.'+this.options.modalClass+'{'+
+                        'top: 10%;'+
+                        'left:5%; }}';
+                    document.body.appendChild(s, 'beforeend');
                     var msgArray = ['success','error','warning','info'];
                     this.opts2 && typeof(this.opts2) != 'object' && console.log('you need to pass an object as the second parameter');
                     this.options.modalTitle= typeof(this.opts2) != 'object' && msgArray.find((msg)=>msg==this.opts)?this.opts.toUpperCase():
@@ -334,7 +345,7 @@
             this.activateModal()
             .hide()
             .html(data)
-            .appendTo("body");
+            .appendTo(this.options.modalAppendTo);
            return this.checkFade();
             
         },

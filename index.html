@@ -7,7 +7,7 @@
        
     </head>
     <body>
-        <div class="noti">gg</div>
+        <div class="noti">gg</div><div class="not">gg</div>
         <script src="jquery.min.js"></script>
         <!-- <script src="bootstrap.min.js"></script> -->
         <script src="notify.js"></script>
@@ -15,29 +15,41 @@
         
     </body>
     <script>
-            $.Notify('indigo','<li>username is required</li>',
-            {
-                modalPlacement:'topRight',
-                showOverlay:true,
-                overlayBgColor:'red',
-                //showCloseBtn: false,
-                dismissOnClickOverlay:false,
-                customModalStyles:{
-                    opacity:'0.1',
-                    kill:''
-                }
-            });
+            // jQuery.Notify('indigo','<li>username is required</li>',
+            // {
+            //     modalPlacement:'topRight',
+            //     showOverlay:true,
+            //     overlayBgColor:'red',
+            //     modalHeight:'200px',
+            //     //showCloseBtn: false,
+            //     //dismissOnClickOverlay:false,
+            //     overRideDefaultStyles:true,
+            //     customModalStyles:{
+            //         opacity:'0.1',
+            //         kill:'',
+            //         height:'500px',
+            //     }
+            // });
             $('.noti').click(function(){
                 $(this).Notify(
                     {   
-                        modalPlacement:'topRight',
-                        overlayBgColor:'red',
-                        showOverlay:true,
-                        modalColor:'black',
+                        //modalPlacement:'topRight',
+                        //overlayBgColor:'red',
+                        showOverlay:false,
+                        modalFade:true,
+                        //modalColor:'black',
+                        overRideDefaultStyles:true,
+                        //modalAppendTo:'.noti',
+                        modalPosition:'relative',
+                        multipleModal:true,
                         customModalStyles:{
-                            opacity:'0.5',
-                            color:'black'
+                            opacity:'1',
+                            color:'black',
+                            height:'300px',
+                            //boxShadow: '0 11px 15px -7px rgba(0, 0, 0, 0.2), 0 24px 38px 3px rgba(0, 0, 0, 0.14), 0 9px 46px 8px rgba(0, 0, 0,0.12)',
+                            //position:'relative'
                         },
+                        modalPlacement:'middleCenter',
                        closeBtnPlacement:{
                             top:0,
                             left:'95%'
@@ -46,6 +58,6 @@
                 );
             });
            
-
+             
         </script>
 </html>
