@@ -8,6 +8,10 @@
     </head>
     <body>
         <div class="noti">gg</div><div class="not">gg</div>
+        <form id="u" method="POST" enctype="multipart/form-data" action="index.html">
+            <input name="name" value="josj">
+            <input type="submit" value="submit" id="sub">
+        </form>
         <script src="jquery.min.js"></script>
         <!-- <script src="bootstrap.min.js"></script> -->
         <script src="notify.js"></script>
@@ -15,6 +19,17 @@
         
     </body>
     <script>
+        //$.FormProcessor('#u','index.html','#sub')
+        //$('#sub').click(function(){
+            $.FormProcessor({
+                actionUrl:'index.html',
+                btnId:'#sub',
+                formId:'#u',
+                resCallback:function(type,msg,opts){
+                $.Notify(type,msg,{showOverlay:false});
+            }
+            }).postForm()
+        //})
             // jQuery.Notify('indigo','<li>username is required</li>',
             // {
             //     modalPlacement:'topRight',
@@ -29,30 +44,36 @@
             //         kill:'',
             //         height:'500px',
             //     }
-            // });
+            // }); $.Notify.global.overlayBgColor = 'red';
+            $.Notify.global.showOverlay=false //= 'red';
             $('.noti').click(function(){
                 $(this).Notify(
                     {   
                         //modalPlacement:'topRight',
-                        //overlayBgColor:'red',
-                        showOverlay:false,
+                        overlayBgColor:'red',
+                        //showOverlay:false,
                         modalFade:true,
                         //modalColor:'black',
                         overRideDefaultStyles:true,
                         //modalAppendTo:'.noti',
-                        modalPosition:'relative',
+                        //modalPosition:'relative',
+                        modalClass:'lanre',
                         multipleModal:true,
                         customModalStyles:{
                             opacity:'1',
                             color:'black',
-                            height:'300px',
+                            width:'300px',
                             //boxShadow: '0 11px 15px -7px rgba(0, 0, 0, 0.2), 0 24px 38px 3px rgba(0, 0, 0, 0.14), 0 9px 46px 8px rgba(0, 0, 0,0.12)',
-                            //position:'relative'
+                            position:'relative'
                         },
-                        modalPlacement:'middleCenter',
-                       closeBtnPlacement:{
+                        modalPlacement:'topCenter',
+                        closeBtnPlacement:{
                             top:0,
-                            left:'95%'
+                            left:'90%'
+                        },
+                        customCloseBtnStyles:{
+                            'font-size':'50px',
+                            'color':'white'
                         }
                     }
                 );

@@ -6,9 +6,11 @@
     var Notify = function(opts,opts1,opts2){
         var self = this;
         this.defaultOptions = {
+
+        //modal placement settings
             topCenter:{
                 top: '10%',
-                left: '40%',
+                left: '30%',
             },
             topRight:{
                 top:0,
@@ -19,8 +21,8 @@
                 left: '0%',
             },
             middleCenter:{
-                top: '40%',
-                left: '40%',
+                top: '140px',
+                left: '30%'
             },
             middleRight:{
                 top: '10%',
@@ -43,9 +45,10 @@
                 left: '40%',
             },
             
-            modalBoxShadow: '10px',
+        //modal css properties
+            modalBoxShadow: '0 11px 15px -7px rgba(0, 0, 0, 0.2), 0 24px 38px 3px rgba(0, 0, 0, 0.14), 0 9px 46px 8px rgba(0, 0, 0,0.12)',
             modalPosition: 'fixed',
-            modalWidth: '300px',
+            modalWidth: 'auto',
             modalHeight: 'auto',
             modalZIndex: 9999,
             modalBgColor:  '#00d1b2', 
@@ -54,7 +57,8 @@
             modalBorder: '1px solid transparent',
             modalBorderRadius: '.25rem',
             modalColor:'white',
-        
+
+        //modal settings properties
             modalFade: false,
             modalMsgType: 'success',
             modalFadeInSpeed: 2000,
@@ -66,35 +70,41 @@
             modalAppendTo:'body',
             modalClass:'notify-modal-window',
             modalPlacement:'topCenter',
-            
+
+        //overlay settings properties
             showOverlay: true,
             overlayAppendTo: function(){
                 return self.options.modalAppendTo},
             overlayClass:'notify-modal-overlay',
-            
+
+        //overlay css properties
             overlayPosition: 'fixed',
             overlayBgColor: 'rgba(0,0,0,.5)' , 
             overlayZIndex: 999,
-            
+        
+        //close button css properties
             closeBtnColor:'white',
             closeBtnBgColor: '',
             closeBtnPosition:'absolute ',
-            //top:'5%',
             closeBtnBorderRadius: '50%',
-            //left: '90%',
+        
+        //close button properties
             showCloseBtn: true,
-            closeBtnIcon:'fa fa-trash',
+            closeBtnIcon:'',
+            closeBtnText : '&times',
             closeBtnPlacement:'topRight',
             customModalStyles:{},
             customCloseBtnStyles:{},
+
             dismissOnClickOverlay:true,
             overRideDefaultStyles:false,
-            modalMediaQUeries:''
+            modalMediaQUeries:'',
             
         }
-        this.opts = opts;
-        this.opts1 = opts1;
-        this.opts2 = opts2;
+
+        this.opts = opts; // options (object or string)
+        this.opts1 = opts1; //options1 ( string)
+        this.opts2 = opts2; //options2 (object)
         
         this.options = $.extend({},this.defaultOptions, opts);
 
@@ -145,11 +155,12 @@
          */
         checkCustomStyles:function(type){
             var self = this;
-            if(this.options.overRideDefaultStyles){
-                return this.options.customModalStyles
-            }
+            
                 switch (type) {
                     case 'modal':
+                        if(this.options.overRideDefaultStyles){
+                            return this.options.customModalStyles
+                        }
                         var props = Object.getOwnPropertyNames(this.options.customModalStyles);
                         props.filter(function(prop){
                             if(self.initModalStyles[prop]){
@@ -157,9 +168,12 @@
                                 delete self.options.customModalStyles[prop];
                             }
                         })
-                    return this.options.customModalStyles;
+                        return this.options.customModalStyles;
                         break;
                     case 'closeBtn':
+                        if(this.options.overRideDefaultStyles){
+                            return this.options.customCloseBtnStyles
+                        }
                         var props = Object.getOwnPropertyNames(this.options.customCloseBtnStyles);
                         props.filter(function(prop){
                             if(self.initialCloseBtnStyles[prop]){
@@ -176,7 +190,7 @@
         /**
          * initialise the modal
          */
-        initModal : function () {
+        initModal : function (cls=null) {
             //alert(this.checkCustomModalStyles())
             return $("<div>")
             .css(this.modalStyles)
@@ -231,6 +245,9 @@
         activateModal:function(){
             //this.checkOpts2();
             if(this.options.multipleModal){
+                //alert(Math.random());
+                //return;
+               //this.options.modalClass = Math.random().toString();
                 return this.initModal();
             }else{
                 if ($("."+this.options.modalClass).length === 0){
@@ -272,6 +289,7 @@
          * decide modal type to show
          */
         showModal: function(){
+           // alert(this.options.customCloseBtnStyles['font-size']);
             this.checkOpts2();
             var type = this.options.modalType;
             switch (type) {
@@ -280,17 +298,13 @@
                     break;
                 default:
                 
-                    const s = document.createElement('style');
-                    s.textContent = '@media only screen and (max-width: 768px) {'+
-                        '.'+this.options.modalClass+'{'+
-                        'top: 10%;'+
-                        'left:5%; }}';
-                    document.body.appendChild(s, 'beforeend');
+                   
                     var msgArray = ['success','error','warning','info'];
-                    this.opts2 && typeof(this.opts2) != 'object' && console.log('you need to pass an object as the second parameter');
+                    this.opts2 && typeof(this.opts2) != 'object' && console.log('you need to pass an object as the third parameter');
                     this.options.modalTitle= typeof(this.opts2) != 'object' && msgArray.find((msg)=>msg==this.opts)?this.opts.toUpperCase():
                     (typeof(this.opts2) == 'object' && this.opts2.title)? this.opts2.title: this.options.modalTitle;
-                   return this.boxIn(this.opts,this.opts1)
+                   this.boxIn(this.opts,this.opts1)
+                   return this;
             }
         },
 
@@ -346,6 +360,12 @@
             .hide()
             .html(data)
             .appendTo(this.options.modalAppendTo);
+            const s = document.createElement('style');
+            s.textContent = '@media only screen and (max-width: 768px) {'+
+                '.'+this.options.modalClass+'{'+
+                'top: 10%;'+
+                'left:5%; }}';
+            document.head.appendChild(s, 'beforeend');
            return this.checkFade();
             
         },
@@ -404,7 +424,11 @@
         closeBtn: function(e){
             if(this.options.showCloseBtn){
                 var that = this;
-                var btn = $('<div>').html('<span  class="close" ><i class="fa '+this.options.closeBtnIcon+'"></i></span>');
+                var txt = '';
+                if(!this.options.closeBtnIcon){
+                    txt = this.options.closeBtnText
+                }
+                var btn = $('<div>').html('<span  class="close" title="close">'+txt+'<i class="'+this.options.closeBtnIcon+'"></i></span>');
                  btn.children('.close').css(this.closeBtnStyles)
                  $(document).on('click','.close',function(e){
                      that.boxOut(e);
@@ -412,9 +436,25 @@
                 return btn;
             }
             return $('<div>').html('');
+        },
+
+        /**
+         * filter response data
+         */
+        filterData : function(ele){
+            if(ele.indexOf(',') != -1){
+                var str =ele; 
+                var arr = str.split(',');
+                var st ='';
+                for(var i=0; i<arr.length; i++){
+                    st +='<li>'+ arr[i].replace('\"','').replace('[','').replace(']','').replace('\"','')+'</li>';
+                }
+                  return st.replace('\"/g',''); 
+            }
+            return ele;
         }
 
-
+        
     };
     
     $.Notify =  function(opts,opts1,opts2){
@@ -423,4 +463,12 @@
     $.fn.Notify = function(opts){
         return new Notify(opts).showModal();
     }
+    $.Notify.global = function(){
+        return this.defaultOptions;
+    } 
 })(jQuery);
+
+
+
+
+
